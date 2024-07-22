@@ -1,0 +1,30 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plinko Game</title>
+    <style>
+      canvas {
+        background-color: black;
+      }
+
+      #add-ball {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #0f0;
+        padding: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
+    <div id="add-ball">Add Ball</div>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d"); // createCircle , createRectangle , createTriangle , createLine
+    </script>
+  </body>
+</html>
