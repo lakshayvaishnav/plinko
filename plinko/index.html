@@ -5,10 +5,10 @@
     <title>Plinko Game</title>
     <style>
       body {
-        background-color: #020617;
+        background-color: #1b2c39;
       }
       canvas {
-        background-color: black;
+        background-color: #0f212e;
       }
 
       #add-ball {
@@ -89,7 +89,7 @@
 
         draw() {
           ctx.beginPath();
-          ctx.arc(unpad(this.x), unpad(this.y), this.radius, Math.PI * 2);
+          ctx.arc(unpad(this.x), unpad(this.y), this.radius, 0, Math.PI * 2);
           ctx.fillStyle = this.color;
           ctx.fill();
           ctx.closePath();
@@ -97,7 +97,7 @@
 
         update() {
           // change the velocity , change the positions
-          thils.vy = this.vy + gravity;
+          this.vy = this.vy + gravity;
           this.x += this.vx; // x = x1 + v
           this.y += this.vy;
 
@@ -120,7 +120,7 @@
               // Adjust position to prevent sticking.
               const overlap = this.radius + obstacle.radius - unpad(dist);
               this.x += pad(Math.cos(angle) * overlap);
-              this.y += pad(Math.sind(angle) * overlap);
+              this.y += pad(Math.sin(angle) * overlap);
             }
           });
 
@@ -153,7 +153,7 @@
           ctx.beginPath();
           ctx.arc(
             unpad(obstacle.x),
-            unpad(obstacle, y),
+            unpad(obstacle.y),
             obstacle.radius,
             0,
             Math.PI * 2
@@ -171,7 +171,7 @@
           ctx.fillRect(
             sink.x,
             sink.y - sink.height / 2,
-            sink.width - obstacleRadiuss * 2,
+            sink.width - obstacleRadius * 2,
             sink.height
           );
         }
@@ -192,6 +192,8 @@
 
       function draw() {
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        drawObstacles();
+        drawSinks();
         balls.forEach((ball) => {
           ball.draw();
           ball.update();
