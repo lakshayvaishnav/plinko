@@ -64,6 +64,146 @@
           obstacles.push({ x: pad(x), y: pad(y), radius: obstacleRadius });
         }
       }
+
+      // create sinks at the bottom as rectangles.
+
+      const sinkWidth = 36;
+      const NUM_SINKS = 15;
+      for (let i = 0; i < NUM_SINKS; i++) {
+        const x = WIDTH / 2 + (i - 7.5) * sinkWidth + obstacleRadius;
+        const y = HEIGHT - 240;
+        const width = sinkWidth;
+        const height = width;
+        sinks.push({ x, y, width, height });
+      }
+
+      class Ball {
+        constructor(x, y, radius, color) {
+          this.x = x;
+          this.y = y;
+          this.radius = radius;
+          this.color = color;
+          this.vx = 0;
+          this.vy = 0;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(unpad(this.x), unpad(this.y), this.radius, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+          ctx.closePath();
+        }
+
+        update() {
+          // change the velocity , change the positions
+          thils.vy = this.vy + gravity;
+          this.x += this.vx; // x = x1 + v
+          this.y += this.vy;
+
+          // Collistion with obstacles
+          obstacles.forEach((obstacle) => {
+            const dist = Math.hypot(this.x - obstacle.x, this.y - obstacle.y);
+            if (dist < pad(this.radius + obstacle.radius)) {
+              // calculate collision angle.
+
+              const angle = Math.atan2(
+                this.y - obstacle.y,
+                this.x - obstacle.x
+              );
+
+              // Reflect velocity
+              const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+              this.vx = Math.cos(angle) * speed * horizontalFriction;
+              this.vy = Math.sin(angle) * speed * verticalFriction;
+
+              // Adjust position to prevent sticking.
+              const overlap = this.radius + obstacle.radius - unpad(dist);
+              this.x += pad(Math.cos(angle) * overlap);
+              this.y += pad(Math.sind(angle) * overlap);
+            }
+          });
+
+          // collision with sinks
+          sinks.forEach((sink) => {
+            if (
+              unpad(this.x) > sink.x - sink.width / 2 &&
+              unpad(this.x) < sink.x + sink.width / 2 &&
+              unpad(this.y) + this.radius > sink.y - sink.height / 2
+            ) {
+              this.vx = 0;
+              this.vy = 0;
+            }
+          });
+        }
+      }
+
+      const initialBall = new Ball(
+        pad(WIDTH / 2 + 23),
+        pad(50),
+        ballRadius,
+        "red"
+      );
+      balls.push(initialBall);
+
+      // draw obstacles.
+      function drawObstacles() {
+        ctx.fillStyle = "white";
+        obstacles.forEach((obstacle) => {
+          ctx.beginPath();
+          ctx.arc(
+            unpad(obstacle.x),
+            unpad(obstacle, y),
+            obstacle.radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+          ctx.closePath();
+        });
+      }
+
+      //  draw sinks.
+      function drawSinks() {
+        ctx.fillStyle = "green";
+        for (let i = 0; i < sinks.length; i++) {
+          const sink = sinks[i];
+          ctx.fillRect(
+            sink.x,
+            sink.y - sink.height / 2,
+            sink.width - obstacleRadiuss * 2,
+            sink.height
+          );
+        }
+      }
+
+      // add the ball to canvas
+      function addBall() {
+        const newBall = new Ball(
+          pad(WIDTH / 2 + 13),
+          pad(50),
+          ballRadius,
+          "red"
+        );
+        balls.push(newBall);
+      }
+
+      document.getElementById("add-ball").addEventListener("click", addBall);
+
+      function draw() {
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        balls.forEach((ball) => {
+          ball.draw();
+          ball.update();
+        });
+      }
+
+      function update() {
+        draw();
+        requestAnimationFrame(update);
+      }
+
+      update();
     </script>
   </body>
 </html>
