@@ -15,7 +15,7 @@ export class BallManager {
   private ctx: CanvasRenderingContext2D;
   private obstacles: Obstacle[];
   private sinks: Sink[];
-  private requestedId?: number;
+  private requestId?: number;
   private onFinish?: (index: number, startX?: number) => void;
 
   constructor(
@@ -66,13 +66,13 @@ export class BallManager {
 
   getColor(index: number) {
     if (index < 3 || index > this.sinks.length - 3) {
-      return { background: "#ff003f", color: "whilte" };
+      return { background: "#ff003f", color: "white" };
     }
     if (index < 6 || index > this.sinks.length - 6) {
-      return { background: "#ffbf00", color: "white" };
+      return { background: "#ff7f00", color: "white" };
     }
     if (index < 9 || index > this.sinks.length - 9) {
-      return { background: "#ffbff00", color: "black" };
+      return { background: "#ffbf00", color: "black" };
     }
     if (index < 12 || index > this.sinks.length - 12) {
       return { background: "#ffff00", color: "black" };
@@ -82,7 +82,6 @@ export class BallManager {
     }
     return { background: "#7fff00", color: "black" };
   }
-
   drawSinks() {
     this.ctx.fillStyle = "green";
     const SPACING = obstacleRadius * 2;
@@ -117,12 +116,12 @@ export class BallManager {
 
   update() {
     this.draw();
-    this.requestedId = requestAnimationFrame(this.update.bind(this));
+    this.requestId = requestAnimationFrame(this.update.bind(this));
   }
 
   stop() {
-    if (this.requestedId) {
-      cancelAnimationFrame(this.requestedId);
+    if (this.requestId) {
+      cancelAnimationFrame(this.requestId);
     }
   }
 }

@@ -49,28 +49,27 @@ export class Ball {
     this.x += this.vx;
     this.y += this.vy;
 
-    // collision with the obstacles.
+    // Collision with obstacles
     this.obstacles.forEach((obstacle) => {
       const dist = Math.hypot(this.x - obstacle.x, this.y - obstacle.y);
       if (dist < pad(this.radius + obstacle.radius)) {
-        // calculate collision angle.
+        // Calculate collision angle
         const angle = Math.atan2(this.y - obstacle.y, this.x - obstacle.x);
         // Reflect velocity
         const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
         this.vx = Math.cos(angle) * speed * horizontalFriction;
         this.vy = Math.sin(angle) * speed * verticalFriction;
 
-        // Adjust postion to prevent sticking.
+        // Adjust position to prevent sticking
         const overlap = this.radius + obstacle.radius - unpad(dist);
         this.x += pad(Math.cos(angle) * overlap);
         this.y += pad(Math.sin(angle) * overlap);
       }
     });
 
-    // collision with sinks..
+    // Collision with sinks
     for (let i = 0; i < this.sinks.length; i++) {
       const sink = this.sinks[i];
-
       if (
         unpad(this.x) > sink.x - sink.width / 2 &&
         unpad(this.x) < sink.x + sink.width / 2 &&
