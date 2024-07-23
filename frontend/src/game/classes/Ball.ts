@@ -66,5 +66,21 @@ export class Ball {
         this.y += pad(Math.sin(angle) * overlap);
       }
     });
+
+    // collision with sinks..
+    for (let i = 0; i < this.sinks.length; i++) {
+      const sink = this.sinks[i];
+
+      if (
+        unpad(this.x) > sink.x - sink.width / 2 &&
+        unpad(this.x) < sink.x + sink.width / 2 &&
+        unpad(this.y) + this.radius > sink.y - sink.height / 2
+      ) {
+        this.vx = 0;
+        this.vy = 0;
+        this.onFinish(i);
+        break;
+      }
+    }
   }
 }
