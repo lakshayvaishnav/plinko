@@ -1,4 +1,10 @@
-import { WIDTH, ballRadius } from "../constants";
+import {
+  HEIGHT,
+  WIDTH,
+  ballRadius,
+  obstacleRadius,
+  sinkWidth,
+} from "../constants";
 import { Obstacle, Sink, createObstacles, createSinks } from "../objects";
 import { pad, unpad } from "../padding";
 import { Ball } from "./Ball";
@@ -14,15 +20,15 @@ export class BallManager {
 
   constructor(
     canvasRef: HTMLCanvasElement,
-    onFinish?: (index: number, startX: number) => void
+    onFinish?: (index: number, startX?: number) => void
   ) {
     this.balls = [];
     this.canvasRef = canvasRef;
     this.ctx = this.canvasRef.getContext("2d")!;
     this.obstacles = createObstacles();
     this.sinks = createSinks();
-    // this.update();
-    // this.onFinish = onFinish;
+    this.update();
+    this.onFinish = onFinish;
   }
 
   addBall(startX?: number) {
@@ -75,5 +81,48 @@ export class BallManager {
       return { background: "#bfff00", color: "black" };
     }
     return { background: "#7fff00", color: "black" };
+  }
+
+  drawSinks() {
+    this.ctx.fillStyle = "green";
+    const SPACING = obstacleRadius * 2;
+    for (let i = 0; i < this.sinks.length; i++) {
+      this.ctx.fillStyle = this.getColor(i).background;
+      const sink = this.sinks[i];
+      this.ctx.font = "normal 13px Arial";
+      this.ctx.fillRect(
+        sink.x,
+        sink.y - sink.height / 2,
+        sink.width - SPACING,
+        sink.height
+      );
+      this.ctx.fillStyle = this.getColor(i).color;
+      this.ctx.fillText(
+        sink?.multiplier?.toString() + "x",
+        sink.x - 15 + sinkWidth / 2,
+        sink.y
+      );
+    }
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    this.drawObstacles();
+    this.drawSinks();
+    this.balls.forEach((ball) => {
+      ball.draw();
+      ball.update();
+    });
+  }
+
+  update() {
+    this.draw();
+    this.requestedId = requestAnimationFrame(this.update.bind(this));
+  }
+
+  stop() {
+    if (this.requestedId) {
+      cancelAnimationFrame(this.requestedId);
+    }
   }
 }
