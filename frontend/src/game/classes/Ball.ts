@@ -1,4 +1,6 @@
+import { gravity, horizontalFriction, verticalFriction } from "../constants";
 import { Obstacle, Sink } from "../objects";
+import { pad, unpad } from "../padding";
 
 export class Ball {
   private x: number;
@@ -32,5 +34,37 @@ export class Ball {
     this.obstacles = obstacles;
     this.sinks = sinks;
     this.onFinish = onFinish;
+  }
+
+  draw() {
+    this.ctx.beginPath();
+    this.ctx.arc(unpad(this.x), unpad(this.y), this.radius, 0, Math.PI * 2);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+    this.ctx.closePath();
+  }
+
+  update() {
+    this.vy += gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // collision with the obstacles.
+    this.obstacles.forEach((obstacle) => {
+      const dist = Math.hypot(this.x - obstacle.x, this.y - obstacle.y);
+      if (dist < pad(this.radius + obstacle.radius)) {
+        // calculate collision angle.
+        const angle = Math.atan2(this.y - obstacle.y, this.x - obstacle.x);
+        // Reflect velocity
+        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        this.vx = Math.cos(angle) * speed * horizontalFriction;
+        this.vy = Math.sin(angle) * speed * verticalFriction;
+
+        // Adjust postion to prevent sticking.
+        const overlap = this.radius + obstacle.radius - unpad(dist);
+        this.x += pad(Math.cos(angle) * overlap);
+        this.y += pad(Math.sin(angle) * overlap);
+      }
+    });
   }
 }
