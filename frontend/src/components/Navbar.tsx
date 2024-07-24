@@ -7,7 +7,7 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   return (
-    <nav className="bg-white z-50 border-gray-200 dark:bg-[#262522] borbder-b shadow-lg">
+    <nav className=" z-50 border-black bg-[#1A2C38]   shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           to="/"
@@ -24,7 +24,7 @@ export const Navbar = () => {
         </Link>
         <Button
           data-collapse-toggle="navbar-default"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm  rounded-lg md:hidden focus:outline-none focus:ring-2 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 bg-transparent"
+          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm  rounded-lg md:hidden focus:outline-none focus:ring-2 dark:text-gray-400 dark:hover:bg-[#2F4452] dark:focus:ring-gray-600 bg-transparent"
           onClick={() => {
             setIsMenuOpen(!isMenuOpen);
           }}
@@ -39,7 +39,7 @@ export const Navbar = () => {
           id="navbar-default"
         >
           <Button
-            className="bg-transparent mx-4 hover:bg-black w-[50%]"
+            className="bg-transparent mx-4 hover:bg-purple-400 w-[50%]"
             onClick={() => navigate("/simulation")}
           >
             Simulation
@@ -53,13 +53,13 @@ export const Navbar = () => {
         </div>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <Button
-            className="bg-transparent mx-4 hover:bg-black"
+            className="bg-transparent mx-4 hover:bg-[#2F4452]"
             onClick={() => navigate("/simulation")}
           >
             Simulation
           </Button>
           <Button
-            className="bg-transparent mx-4 hover:bg-black"
+            className="bg-transparent mx-4 hover:bg-[#2F4452]"
             onClick={() => navigate("/game")}
           >
             Game

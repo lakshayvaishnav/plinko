@@ -61,8 +61,8 @@ export const Simulate = () => {
   }, [canvasRef]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <canvas ref={canvasRef} width="800" height="800"></canvas>
+    <div className="flex flex-col items-center justify-center ml-5 mt-5 mb-5 bg-[#0E202E]">
+      <canvas ref={canvasRef} width="800" height="750"></canvas>
     </div>
   );
 };
