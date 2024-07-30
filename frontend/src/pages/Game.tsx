@@ -18,7 +18,7 @@ export function Game() {
   }, [canvasRef]);
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center">
+    <div className="flex flex-col lg:flex-row items-center justify-center  bg-[#0E202E]">
       <canvas ref={canvasRef} width="800" height="800"></canvas>
       <Button
         className="px-10 mb-4"

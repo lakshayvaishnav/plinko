@@ -57,7 +57,7 @@ export function Simulation() {
   }, [canvasRef]);
 
   return (
-    <div className="flex flex-col lg:flex-row  items-center justify-between h-screen">
+    <div className="flex flex-col lg:flex-row  items-center justify-between h-screen bg-[#0E202E] text-emerald-50">
       <div className="flex mx-16 flex-col justify-center pt-10">
         {JSON.stringify(outputs, null, 2)}
       </div>
